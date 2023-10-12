@@ -6,6 +6,10 @@ import os
 import pdfkit
 from datetime import datetime, timedelta
 
+import gdown
+import base64
+
+
 def html2pdf(request):
     thai_time_now = datetime.now() + timedelta(hours=7)
     thai_month = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
@@ -26,21 +30,18 @@ def html2pdf(request):
                 'email': 'heart@gmail.com',
                 'signature': 'ภูรี',
             },
-            {
-                'name': 'โจเซฟ โจสตาร์',
-                'role': 'อาจารย์',
-                'department': 'คณะวิศวกรรมศาสตร์',
-                'campus': 'รังสิต',
-                'email': 'dr.jostar@gmail.com',
-                'signature': 'โจเซฟ',
-            },
         ],
         'complain_to': 'NERV สาขาธรรมศาสตร์',
         'because': 'เทวทูตขโมยหัวใจ',
         'want_to': 'เอาหัวใจกลับมา',
         'attachments': [
             {
-                'name': 'ภาพแมว'
+                'name': 'ภาพแมว',
+                'link': 'https://drive.google.com/open?id=1OIuuVjslhMM9YEnvi109BPZjhrU7Qwla'
+            },
+            {
+                'name': 'ภาพหมา',
+                'link': 'https://drive.google.com/open?id=1KIH_56XI7jdTK5T7sCEqVcwPhX0oCxIb'
             },
         ]
     }
@@ -52,6 +53,14 @@ def html2pdf(request):
 
     this_dir = os.path.dirname(__file__)
     template_path = os.path.join(this_dir, 'assets/report_template.html')
+
+    for attachment in context['attachments']:
+        id = attachment['link'].split('=')[1]
+        fetch_gdrive(id)
+        img_path = os.path.join(this_dir, f'inputs/{id}')
+        
+        with open(img_path, 'rb') as img:
+            attachment['base64'] = base64.b64encode(img.read()).decode()
 
     with open(template_path, 'r') as f:
         template = Template(f.read())
@@ -66,3 +75,10 @@ def html2pdf(request):
     response['Content-Disposition'] = 'attachment; filename="report"'
 
     return response
+
+
+def fetch_gdrive(id):
+    url = f'https://drive.google.com/uc?id={id}'
+    this_dir = os.path.dirname(__file__)
+    output_path = os.path.join(this_dir, f'inputs/{id}')
+    gdown.download(url, output_path, quiet=False)

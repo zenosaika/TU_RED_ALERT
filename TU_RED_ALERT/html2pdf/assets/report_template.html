@@ -36,14 +36,27 @@
         <p class="left"><span class="tab"></span>1. สำเนาบัตรประจำตัวประชาชน จำนวน - ใบ</p>
         <p class="left"><span class="tab"></span>2. เอกสารอื่น ๆ (ระบุ)</p>
         {% for attachment in attachments %}
-            <p class="left"><span class="tab"></span>- {{ attachment.name }}</p>
+            <p class="left"><span class="tab2"></span>- {{ attachment.name }}</p>
         {% endfor %}
         <br>
-        <div class="center" style="float: right;">
-            <p>ขอแสดงความนับถือ</p>
-            <p>(ลงชื่อ) <i style="margin-left: 8px; margin-right: 8px;">{{ complainants.0.signature }}</i> ผู้ร้องทุกข์ / ร้องเรียน</p>
-            <p>( {{ complainants.0.name }} )</p>
+        <div style="float: right;">
+            <div class="center">
+                <p>ขอแสดงความนับถือ</p>
+                <p>(ลงชื่อ) <i style="margin-left: 8px; margin-right: 8px;">{{ complainants.0.signature }}</i> ผู้ร้องทุกข์ / ร้องเรียน</p>
+                <p>( {{ complainants.0.name }} )</p>
+            </div>
         </div>
+        <div style="clear: both;"></div>
+        <div class="new-page"></div>
+        <br>
+        <h2 class="center">เอกสารแนบ</h2>
+        <br>
+        {% for attachment in attachments %}
+            <div class="center">
+                <img src="data:;base64,{{attachment.base64}}" style="min-width: 70%; max-width: 90%;">
+                <p>{{ attachment.name }}</p>
+            </div>
+        {% endfor %}
     </div>
 </body>
 </html>

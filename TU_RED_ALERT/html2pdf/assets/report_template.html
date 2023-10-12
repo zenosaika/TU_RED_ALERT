@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report</title>
+</head>
+<body>
+    <div>
+        <br>
+        <h1 class="center">แบบฟอร์มหนังสือร้องทุกข์ - ร้องเรียน</h1>
+        <br>
+        <p class="right">เขียนที่ {{ place }}</p>
+        <p class="right">วันที่ {{ day }} {{ month }} พ.ศ. {{ year }}</p>
+        <br>
+        <p class="left">เรื่อง<span class="tab"></span>{{ title }}</p>
+        <p class="left">เรียน<span class="tab"></span>{{ to }}</p>
+        <br>
+        {% for complainant in complainants %}
+            {% if forloop.first %}
+                <p class="left"><span class="tab2"></span>ข้าพเจ้า <i>{{ complainant.name }}</i> ตำแหน่ง <i>{{ complainant.role }}</i> สังกัด <i>{{ complainant.department }}</i></p>
+                <p class="left">วิทยาเขต <i>{{ complainant.campus }}</i> อีเมล <i>{{ complainant.email }}</i></p>
+            {% else %}
+                <p class="left">และ ข้าพเจ้า <i>{{ complainant.name }}</i> ตำแหน่ง <i>{{ complainant.role }}</i> สังกัด <i>{{ complainant.department }}</i></p>
+                <p class="left">วิทยาเขต <i>{{ complainant.campus }}</i> อีเมล <i>{{ complainant.email }}</i></p>
+        {% endif %} 
+        {% endfor %}
+        <br>
+        <p class="left">ขอร้องทุกข์ - ร้องเรียน ต่อ <i>{{ complain_to }}</i> เนื่องจาก</p>
+        <p class="left"><span class="tab"></span>{{ because }}</p>
+        <br>
+        <p class="left">เพื่อให้ดำเนินการช่วยเหลือและแก้ไขปัญหา ดังนี้</p>
+        <p class="left"><span class="tab"></span>{{ want_to }}</p>
+        <br>
+        <p class="left">พร้อมนี้ข้าพเจ้าได้แนบเอกสารหลักฐานต่าง ๆ มาด้วย คือ</p>
+        <p class="left"><span class="tab"></span>1. สำเนาบัตรประจำตัวประชาชน จำนวน - ใบ</p>
+        <p class="left"><span class="tab"></span>2. เอกสารอื่น ๆ (ระบุ)</p>
+        {% for attachment in attachments %}
+            <p class="left"><span class="tab"></span>- {{ attachment.name }}</p>
+        {% endfor %}
+        <br>
+        <div class="center" style="float: right;">
+            <p>ขอแสดงความนับถือ</p>
+            <p>(ลงชื่อ) <i style="margin-left: 8px; margin-right: 8px;">{{ complainants.0.signature }}</i> ผู้ร้องทุกข์ / ร้องเรียน</p>
+            <p>( {{ complainants.0.name }} )</p>
+        </div>
+    </div>
+</body>
+</html>
